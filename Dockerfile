@@ -4,6 +4,7 @@ WORKDIR /app
 
 # Install ALL dependencies (including devDependencies)
 COPY package*.json ./
+COPY tsconfig*.json ./
 RUN npm install --include=dev
 
 # Copy source files
