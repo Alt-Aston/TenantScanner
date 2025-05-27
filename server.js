@@ -8,68 +8,94 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Add detailed request logging middleware
+// Error handling middleware
+const errorHandler = (err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).send('Internal Server Error');
+};
+
+// Request logging middleware
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] Request:`, {
-    method: req.method,
-    url: req.url,
-    headers: req.headers
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
+// Security headers
+app.use((req, res, next) => {
+  res.set({
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'X-XSS-Protection': '1; mode=block'
   });
   next();
 });
 
-// Explicitly handle asset files first
-app.get('/TenantScanner/assets/*', (req, res, next) => {
-  const filePath = path.join(__dirname, 'dist', req.url);
-  console.log('Attempting to serve asset:', filePath);
-  
-  if (fs.existsSync(filePath)) {
-    console.log('Asset exists, serving file:', filePath);
+// Serve static files with proper MIME types
+const staticOptions = {
+  setHeaders: (res, filePath) => {
+    // Set correct content types
     if (filePath.endsWith('.js')) {
-      res.set('Content-Type', 'application/javascript');
-      console.log('Set Content-Type to application/javascript');
+      res.set('Content-Type', 'application/javascript; charset=utf-8');
+    } else if (filePath.endsWith('.css')) {
+      res.set('Content-Type', 'text/css; charset=utf-8');
+    } else if (filePath.endsWith('.html')) {
+      res.set('Content-Type', 'text/html; charset=utf-8');
     }
-    res.sendFile(filePath);
-  } else {
-    console.log('Asset not found:', filePath);
-    next();
-  }
-});
+    
+    // Set caching headers for static assets
+    if (filePath.includes('/assets/')) {
+      res.set('Cache-Control', 'public, max-age=31536000'); // 1 year
+    }
+  },
+  maxAge: '1d' // Default cache time for other static files
+};
 
 // Serve static files from the dist directory
-app.use(express.static(path.join(__dirname, 'dist'), {
-  setHeaders: (res, path) => {
-    if (path.endsWith('.js')) {
-      res.set('Content-Type', 'application/javascript');
-    }
-  }
-}));
+app.use(express.static(path.join(__dirname, 'dist'), staticOptions));
 
-// Handle React routing, return all requests to React app
-app.get('*', function(req, res) {
-  console.log('Fallback: Serving index.html for path:', req.url);
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
 });
 
-const port = process.env.PORT || 8080;
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Server is running on port ${port}`);
-  console.log(`Current directory: ${__dirname}`);
-  console.log(`Static files directory: ${path.join(__dirname, 'dist')}`);
+// Handle React routing
+app.get('*', (req, res) => {
+  const indexPath = path.join(__dirname, 'dist', 'index.html');
   
-  // Log the contents of the dist directory
-  console.log('Contents of dist directory:');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    console.error('index.html not found at:', indexPath);
+    res.status(404).send('Application not properly initialized');
+  }
+});
+
+// Add error handling middleware last
+app.use(errorHandler);
+
+const port = process.env.PORT || 8080;
+const server = app.listen(port, '0.0.0.0', () => {
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`);
+  console.log(`Static files being served from: ${path.join(__dirname, 'dist')}`);
+  
+  // Log dist directory structure on startup
   try {
-    const distContents = fs.readdirSync(path.join(__dirname, 'dist'));
-    console.log(distContents);
-    
-    // Log contents of assets directory if it exists
-    const assetsPath = path.join(__dirname, 'dist', 'TenantScanner', 'assets');
-    if (fs.existsSync(assetsPath)) {
-      console.log('Contents of assets directory:');
-      console.log(fs.readdirSync(assetsPath));
+    const distPath = path.join(__dirname, 'dist');
+    if (fs.existsSync(distPath)) {
+      console.log('Dist directory contents:', fs.readdirSync(distPath));
+    } else {
+      console.error('Warning: dist directory not found');
     }
   } catch (err) {
     console.error('Error reading dist directory:', err);
   }
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
 }); 
