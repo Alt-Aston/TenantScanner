@@ -27,11 +27,11 @@ COPY --from=builder /app/dist ./dist
 COPY server.js .
 
 # Set environment variables
-ENV PORT=3000
+ENV PORT=8080
 ENV NODE_ENV=production
 
 # Expose the port the app runs on
-EXPOSE 3000
+EXPOSE 8080
 
 # Start the server
 CMD ["node", "server.js"] 
