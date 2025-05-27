@@ -58,6 +58,16 @@ function App() {
         }}
       />
 
+      {/* Coffee button */}
+      <a
+        href="https://venmo.com/u/astondavies77"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-4 right-4 bg-white/90 backdrop-blur-sm hover:bg-white/100 text-gray-800 px-4 py-2 rounded-full shadow-lg transition-all hover:shadow-xl flex items-center gap-2 z-50"
+      >
+        Say thanks with coffee ☕️
+      </a>
+
       <div className="max-w-4xl w-full bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl p-8 relative z-10">
         <h1 className="text-3xl font-heading font-bold text-center mb-8">
           Azure Tenant ID Lookup Tool
