@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import { useState } from 'react';
 import { fetchTenantId, type TenantLookupResult } from '../utils/fetchTenantId';
 
 interface SingleDomainFormProps {
@@ -9,7 +9,7 @@ interface SingleDomainFormProps {
 export function SingleDomainForm({ onResult, isLoading }: SingleDomainFormProps) {
   const [domain, setDomain] = useState('');
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!domain.trim()) return;
     

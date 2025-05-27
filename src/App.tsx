@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { SingleDomainForm } from './components/SingleDomainForm';
 import { DomainUploader } from './components/DomainUploader';
