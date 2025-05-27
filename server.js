@@ -30,6 +30,15 @@ app.use((req, res, next) => {
   next();
 });
 
+// Rewrite /TenantScanner/assets URLs to /assets
+app.use((req, res, next) => {
+  if (req.url.startsWith('/TenantScanner/assets/')) {
+    req.url = req.url.replace('/TenantScanner/assets/', '/assets/');
+    console.log('Rewritten URL:', req.url);
+  }
+  next();
+});
+
 // Serve static files with proper MIME types
 const staticOptions = {
   setHeaders: (res, filePath) => {
@@ -60,8 +69,12 @@ app.get('/health', (req, res) => {
 
 // Handle React routing
 app.get('*', (req, res) => {
-  const indexPath = path.join(__dirname, 'dist', 'index.html');
+  // Log the requested URL and available files
+  console.log('Handling route:', req.url);
+  const distPath = path.join(__dirname, 'dist');
+  console.log('Available files in dist:', fs.readdirSync(distPath));
   
+  const indexPath = path.join(__dirname, 'dist', 'index.html');
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
@@ -83,6 +96,12 @@ const server = app.listen(port, '0.0.0.0', () => {
     const distPath = path.join(__dirname, 'dist');
     if (fs.existsSync(distPath)) {
       console.log('Dist directory contents:', fs.readdirSync(distPath));
+      
+      // Also log contents of assets directory
+      const assetsPath = path.join(distPath, 'assets');
+      if (fs.existsSync(assetsPath)) {
+        console.log('Assets directory contents:', fs.readdirSync(assetsPath));
+      }
     } else {
       console.error('Warning: dist directory not found');
     }
