@@ -3,11 +3,11 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy package files first for better caching
-COPY package*.json ./
+COPY package.json package-lock.json ./
 COPY tsconfig*.json ./
 
 # Install dependencies with exact versions
-RUN npm ci
+RUN npm clean-install
 
 # Copy source files
 COPY . .
@@ -24,8 +24,8 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Install production dependencies only
-COPY package*.json ./
-RUN npm ci --only=production
+COPY package.json package-lock.json ./
+RUN npm clean-install --omit=dev
 
 # Copy built files from builder stage
 COPY --from=builder /app/dist ./dist
