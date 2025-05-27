@@ -8,6 +8,7 @@ import type { TenantLookupResult } from './utils/fetchTenantId';
 import { batchFetchTenantIds } from './utils/fetchTenantId';
 import '@fontsource/inter';
 import '@fontsource/poppins';
+import backgroundImage from './assets/anna-surovkova-3tv-f4SXSZQ-unsplash.jpg';
 
 function App() {
   const [results, setResults] = useState<TenantLookupResult[]>([]);
@@ -42,7 +43,7 @@ function App() {
     <div 
       className="min-h-screen w-screen bg-cover bg-center bg-no-repeat flex items-center justify-center p-4"
       style={{ 
-        backgroundImage: 'url(/img/anna-surovkova-3tv-f4SXSZQ-unsplash.jpg)',
+        backgroundImage: `url(${backgroundImage})`,
         height: '100vh',
         width: '100vw',
       }}
