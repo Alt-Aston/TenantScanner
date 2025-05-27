@@ -2,12 +2,15 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
+# Update npm to a specific version known to work
+RUN npm install -g npm@10.2.4
+
 # Copy package files first for better caching
 COPY package.json package-lock.json ./
 COPY tsconfig*.json ./
 
-# Install dependencies with exact versions
-RUN npm clean-install
+# Install ALL dependencies (including dev dependencies)
+RUN npm install
 
 # Copy source files
 COPY . .
@@ -23,9 +26,14 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Install production dependencies only
+# Update npm to same version as builder
+RUN npm install -g npm@10.2.4
+
+# Copy package files
 COPY package.json package-lock.json ./
-RUN npm clean-install --omit=dev
+
+# Install only production dependencies
+RUN npm install --production
 
 # Copy built files from builder stage
 COPY --from=builder /app/dist ./dist
