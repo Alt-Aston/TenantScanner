@@ -26,6 +26,10 @@ RUN npm install --omit=dev
 COPY --from=builder /app/dist ./dist
 COPY server.js .
 
+# Set environment variables
+ENV PORT=3000
+ENV NODE_ENV=production
+
 # Expose the port the app runs on
 EXPOSE 3000
 
