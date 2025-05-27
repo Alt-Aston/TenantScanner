@@ -2,9 +2,9 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files
+# Install dependencies first (better layer caching)
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 # Copy source files
 COPY . .
@@ -12,5 +12,8 @@ COPY . .
 # Build the app
 RUN npm run build
 
+# Expose the port the app runs on
+EXPOSE 3000
+
 # Start the server
-CMD ["npm", "start"] 
+CMD ["node", "server.js"] 
