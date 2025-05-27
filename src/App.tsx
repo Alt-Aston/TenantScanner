@@ -41,14 +41,24 @@ function App() {
 
   return (
     <div 
-      className="min-h-screen w-screen bg-cover bg-center bg-no-repeat flex items-center justify-center p-4"
+      className="min-h-screen w-screen bg-cover bg-center bg-no-repeat flex items-center justify-center p-4 relative"
       style={{ 
         backgroundImage: `url(${backgroundImage})`,
         height: '100vh',
         width: '100vw',
       }}
     >
-      <div className="max-w-4xl w-full bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl p-8">
+      {/* Blue overlay */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          backgroundColor: 'rgb(0, 32, 128)',
+          opacity: '0.5',
+          mixBlendMode: 'multiply',
+        }}
+      />
+
+      <div className="max-w-4xl w-full bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl p-8 relative z-10">
         <h1 className="text-3xl font-heading font-bold text-center mb-8">
           Azure Tenant ID Lookup Tool
         </h1>
