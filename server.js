@@ -13,8 +13,24 @@ app.use((req, res, next) => {
   next();
 });
 
+// Configure proper MIME types
+app.use((req, res, next) => {
+  if (req.url.endsWith('.js')) {
+    res.type('application/javascript');
+  } else if (req.url.endsWith('.mjs')) {
+    res.type('application/javascript');
+  }
+  next();
+});
+
 // Serve static files from the dist directory
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'dist'), {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.js')) {
+      res.set('Content-Type', 'application/javascript');
+    }
+  }
+}));
 
 // Handle React routing, return all requests to React app
 app.get('*', function(req, res) {
