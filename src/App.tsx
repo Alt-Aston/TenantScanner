@@ -39,13 +39,20 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
+    <div 
+      className="min-h-screen w-screen bg-cover bg-center bg-no-repeat flex items-center justify-center p-4"
+      style={{ 
+        backgroundImage: 'url(/img/anna-surovkova-3tv-f4SXSZQ-unsplash.jpg)',
+        height: '100vh',
+        width: '100vw',
+      }}
+    >
+      <div className="max-w-4xl w-full bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl p-8">
         <h1 className="text-3xl font-heading font-bold text-center mb-8">
           Azure Tenant ID Lookup Tool
         </h1>
 
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <div className="bg-white/80 backdrop-blur rounded-lg shadow-sm p-6 mb-8">
           <Tabs.Root defaultValue="single" className="space-y-6">
             <Tabs.List className="flex space-x-1 border-b">
               <Tabs.Trigger
@@ -109,7 +116,7 @@ function App() {
         </div>
 
         {results.length > 0 && (
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white/80 backdrop-blur rounded-lg shadow-sm p-6">
             <TenantLookupTable results={results} />
           </div>
         )}
