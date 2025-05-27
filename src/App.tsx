@@ -2,6 +2,7 @@ import { useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { SingleDomainForm } from './components/SingleDomainForm';
 import { DomainUploader } from './components/DomainUploader';
+import { BulkPasteForm } from './components/BulkPasteForm';
 import { TenantLookupTable } from './components/TenantLookupTable';
 import type { TenantLookupResult } from './utils/fetchTenantId';
 import { batchFetchTenantIds } from './utils/fetchTenantId';
@@ -51,13 +52,19 @@ function App() {
                 value="single"
                 className="px-4 py-2 text-gray-600 hover:text-gray-900 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-gray-900"
               >
-                Single Domain Lookup
+                Single Domain
               </Tabs.Trigger>
               <Tabs.Trigger
-                value="bulk"
+                value="bulk-paste"
                 className="px-4 py-2 text-gray-600 hover:text-gray-900 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-gray-900"
               >
-                Bulk Upload
+                Bulk Paste
+              </Tabs.Trigger>
+              <Tabs.Trigger
+                value="bulk-upload"
+                className="px-4 py-2 text-gray-600 hover:text-gray-900 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-gray-900"
+              >
+                File Upload
               </Tabs.Trigger>
             </Tabs.List>
 
@@ -68,7 +75,22 @@ function App() {
               />
             </Tabs.Content>
 
-            <Tabs.Content value="bulk" className="space-y-4">
+            <Tabs.Content value="bulk-paste" className="space-y-4">
+              <BulkPasteForm
+                onSubmit={handleBulkUpload}
+                isLoading={isLoading}
+              />
+              {isLoading && progress > 0 && (
+                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                  <div
+                    className="bg-primary h-2.5 rounded-full transition-all"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+              )}
+            </Tabs.Content>
+
+            <Tabs.Content value="bulk-upload" className="space-y-4">
               <DomainUploader
                 onUpload={handleBulkUpload}
                 onError={handleError}
