@@ -47,7 +47,7 @@ export const fetchTenantId = async (domain: string): Promise<TenantLookupResult>
         domain: normalizedDomain,
         tenantId: null,
         status: 'error',
-        error: response.status === 404 ? 'Tenant not found' : 'Failed to fetch tenant information',
+        error: response.status === 404 ? 'Tenant not found' : 'Failed to fetch',
       };
     }
 
