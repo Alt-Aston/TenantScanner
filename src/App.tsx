@@ -41,7 +41,7 @@ function App() {
 
   return (
     <div 
-      className="min-h-screen w-screen bg-cover bg-center bg-no-repeat flex items-center justify-center p-4 relative overflow-auto"
+      className="min-h-screen w-screen bg-cover bg-center bg-no-repeat flex items-center justify-center py-[50px] px-4 relative overflow-auto"
       style={{ 
         backgroundImage: `url(${backgroundImage})`,
         minHeight: '100vh',
