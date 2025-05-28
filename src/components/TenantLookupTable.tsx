@@ -83,14 +83,14 @@ export function TenantLookupTable({ results }: TenantLookupTableProps) {
           placeholder="Search results..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="px-4 py-2 border rounded-md w-full sm:w-64 text-[0.7rem] sm:text-base"
+          className="px-4 py-2 border rounded-md w-full sm:w-64 text-[0.7rem] sm:text-[0.85rem]"
         />
         <button
           onClick={downloadCsv}
           className="flex items-center gap-2 px-4 py-2 text-white bg-primary rounded-md hover:bg-primary/90 w-full sm:w-auto justify-center"
         >
           <Download className="w-4 h-4" />
-          <span className="text-[0.8rem] sm:text-base">Download CSV</span>
+          <span className="text-[0.8rem] sm:text-[0.85rem]">Download CSV</span>
         </button>
       </div>
 
@@ -102,7 +102,7 @@ export function TenantLookupTable({ results }: TenantLookupTableProps) {
                 <th
                   key={key}
                   onClick={() => handleSort(key as keyof TenantLookupResult)}
-                  className="px-4 py-2 text-left cursor-pointer hover:bg-gray-100 text-[0.7rem] sm:text-base"
+                  className="px-4 py-2 text-left cursor-pointer hover:bg-gray-100 text-[0.7rem] sm:text-[0.85rem]"
                 >
                   {key.charAt(0).toUpperCase() + key.slice(1)}
                   {sortConfig.key === key && (
@@ -120,12 +120,12 @@ export function TenantLookupTable({ results }: TenantLookupTableProps) {
                 key={`${result.domain}-${index}`}
                 className="border-t hover:bg-gray-50"
               >
-                <td className="px-4 py-2 text-[0.7rem] sm:text-base">{result.domain}</td>
+                <td className="px-4 py-2 text-[0.7rem] sm:text-[0.85rem]">{result.domain}</td>
                 <td className="px-4 py-2">
                   {result.tenantId ? (
                     <button
                       onClick={() => handleCopyClick(result.tenantId!)}
-                      className="flex items-center gap-2 text-primary hover:text-primary/80 focus:outline-none text-[0.7rem] sm:text-base max-w-[150px] sm:max-w-none"
+                      className="flex items-center gap-2 text-primary hover:text-primary/80 focus:outline-none text-[0.7rem] sm:text-[0.85rem] max-w-[150px] sm:max-w-none"
                       title={result.tenantId}
                     >
                       <span className="truncate">{result.tenantId}</span>
@@ -136,12 +136,12 @@ export function TenantLookupTable({ results }: TenantLookupTableProps) {
                       )}
                     </button>
                   ) : (
-                    <span className="text-gray-400 text-[0.7rem] sm:text-base">Not available</span>
+                    <span className="text-gray-400 text-[0.7rem] sm:text-[0.85rem]">Not available</span>
                   )}
                 </td>
                 <td className="px-4 py-2">
                   <span
-                    className={`inline-flex items-center px-2 py-1 rounded-full text-[0.7rem] sm:text-xs font-medium ${
+                    className={`inline-flex items-center px-2 py-1 rounded-full text-[0.7rem] sm:text-[0.85rem] font-medium ${
                       result.status === 'success'
                         ? 'bg-green-100 text-green-800'
                         : 'bg-red-100 text-red-800'

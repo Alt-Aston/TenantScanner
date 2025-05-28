@@ -41,16 +41,16 @@ function App() {
 
   return (
     <div 
-      className="min-h-screen w-screen bg-cover bg-center bg-no-repeat flex items-center justify-center p-4 relative"
+      className="min-h-screen w-screen bg-cover bg-center bg-no-repeat flex items-center justify-center p-4 relative overflow-auto"
       style={{ 
         backgroundImage: `url(${backgroundImage})`,
-        height: '100vh',
+        minHeight: '100vh',
         width: '100vw',
       }}
     >
       {/* Blue overlay */}
       <div 
-        className="absolute inset-0"
+        className="absolute inset-0 fixed"
         style={{
           backgroundColor: 'rgb(0, 32, 128)',
           opacity: '0.5',
