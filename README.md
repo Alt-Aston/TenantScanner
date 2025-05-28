@@ -28,3 +28,4 @@ npm run build
 This application is automatically deployed to GitHub Pages using GitHub Actions. Any push to the main branch will trigger a new deployment.
 
 Visit the live application at: https://alt-aston.github.io/TenantScanner/
+ 
