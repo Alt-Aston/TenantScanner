@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Download } from 'lucide-react';
+import { Download, Copy, Check } from 'lucide-react';
 import type { TenantLookupResult } from '../utils/fetchTenantId';
 
 interface TenantLookupTableProps {
@@ -8,6 +8,7 @@ interface TenantLookupTableProps {
 
 export function TenantLookupTable({ results }: TenantLookupTableProps) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const [sortConfig, setSortConfig] = useState<{
     key: keyof TenantLookupResult;
     direction: 'asc' | 'desc';
@@ -41,6 +42,16 @@ export function TenantLookupTable({ results }: TenantLookupTableProps) {
       direction:
         current.key === key && current.direction === 'asc' ? 'desc' : 'asc',
     }));
+  };
+
+  const handleCopyClick = async (tenantId: string) => {
+    try {
+      await navigator.clipboard.writeText(tenantId);
+      setCopiedId(tenantId);
+      setTimeout(() => setCopiedId(null), 2000); // Reset after 2 seconds
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
   };
 
   const downloadCsv = () => {
@@ -79,7 +90,7 @@ export function TenantLookupTable({ results }: TenantLookupTableProps) {
           className="flex items-center gap-2 px-4 py-2 text-white bg-primary rounded-md hover:bg-primary/90"
         >
           <Download className="w-4 h-4" />
-          Download CSV
+          <span className="text-[0.8rem] sm:text-base">Download CSV</span>
         </button>
       </div>
 
@@ -111,7 +122,19 @@ export function TenantLookupTable({ results }: TenantLookupTableProps) {
               >
                 <td className="px-4 py-2">{result.domain}</td>
                 <td className="px-4 py-2">
-                  {result.tenantId || (
+                  {result.tenantId ? (
+                    <button
+                      onClick={() => handleCopyClick(result.tenantId!)}
+                      className="flex items-center gap-2 text-primary hover:text-primary/80 focus:outline-none"
+                    >
+                      {result.tenantId}
+                      {copiedId === result.tenantId ? (
+                        <Check className="w-4 h-4 text-green-500" />
+                      ) : (
+                        <Copy className="w-4 h-4" />
+                      )}
+                    </button>
+                  ) : (
                     <span className="text-gray-400">Not available</span>
                   )}
                 </td>
@@ -125,7 +148,7 @@ export function TenantLookupTable({ results }: TenantLookupTableProps) {
                   >
                     {result.status}
                     {result.error && (
-                      <span className="ml-1 text-gray-500">: {result.error}</span>
+                      <span className="ml-1 text-gray-500 hidden sm:inline">: {result.error}</span>
                     )}
                   </span>
                 </td>
