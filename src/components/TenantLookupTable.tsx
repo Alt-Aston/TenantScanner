@@ -146,11 +146,9 @@ export function TenantLookupTable({ results }: TenantLookupTableProps) {
                         ? 'bg-green-100 text-green-800'
                         : 'bg-red-100 text-red-800'
                     }`}
+                    title={result.error || undefined}
                   >
                     {result.status}
-                    {result.error && (
-                      <span className="ml-1 text-gray-500 hidden sm:inline">: {result.error}</span>
-                    )}
                   </span>
                 </td>
               </tr>
